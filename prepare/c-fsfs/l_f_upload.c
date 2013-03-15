@@ -9,10 +9,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
 #include "fdfs_client.h"
 #include "logger.h"
 
@@ -106,15 +110,28 @@ int do_upload(const char *conf_filename, const char *local_filename, const char 
                result, STRERROR(result));
      }
 
-     tracker_disconnect_server_ex(pTrackerServer, true);
+     // tracker_disconnect_server_ex(pTrackerServer, true);
      fdfs_client_destroy();
 
      return result;
 }
 
-int main()
+int upload_lua(lua_State* L)
 {
-     char *conf_filename = "/etc/fdfs/client.conf";
-     char *local_filename = "/Users/zhoujing/Pictures/geek1.png";
+     char *conf_filename = luaL_checkstring(L,1);
+     char *local_filename = luaL_checkstring(L,2);
      do_upload(conf_filename, local_filename, NULL, 0);
+     return 1;
 }
+
+static luaL_Reg mylibs[] = {
+     {"upload_lua", upload_lua},
+     {NULL, NULL} 
+}; 
+
+int luaopen_ok(lua_State* L) 
+{
+     const char* libName = "ok";
+     luaL_register(L,libName,mylibs);
+     return 1;
+ }

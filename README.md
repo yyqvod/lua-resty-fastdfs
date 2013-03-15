@@ -3,7 +3,7 @@ Name
 
 fastDFS_lua_nginx - 试图用nginx的高效，lua的高机动性，fastDFS的高性能，搭建一个更平滑，更快的文件存储服务模块
 
-*Do.* See [MyBlog](http://k-49.com/tag/fastdfs_lua_nginx).
+*Do.* See [MyBlog](http://k-49.com/tag/fdfs_lua_ngx).
 
 Status
 ======
