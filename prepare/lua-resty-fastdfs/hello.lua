@@ -58,7 +58,7 @@ while true do
         if content == nil then
             content = res
         else
-            content = content .. res
+            content = content .. res  --这种方式仅作为测试使用
         end
     elseif typ == "part_end" then
         -- do nothing
