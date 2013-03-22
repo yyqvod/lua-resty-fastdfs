@@ -1,6 +1,25 @@
 --[[
 nginx处理上传请求，调用lua-resty-upload模块读取请求体，将读取的文件buffer连接为一个整体，调用fastDFS的client动态链接库，
 将文件发送给fastDFS，并返回相应的上传结果remote_filename,ip_addr,port,file_size等.
+
+nginx配置
+location = /lua 
+{
+client_max_body_size 1000k;
+client_body_buffer_size 1000k;
+#lua_need_request_body on;
+default_type 'text/html';
+content_by_lua_file /Users/zjngx/ngx_lua/hello.lua;
+}
+
+上传表单：
+<form method="post" action="/lua" enctype="multipart/form-data">
+    <input type="file" name="upload1" /><br />
+    <input type="hidden" name="f_name" value="f_get" />
+    <input type="text" name="f_text" />
+    <input type="submit" />
+</form>
+
 ]]--
 
 local upload = require "resty.upload"
