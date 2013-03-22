@@ -8,7 +8,7 @@ fastDFS_lua_nginx - 试图用nginx的高效，lua的高机动性，fastDFS的高
 Status
 ======
 
-目前出于学习，实验阶段。
+目前处于学习，实验阶段。
 
 Version
 =======

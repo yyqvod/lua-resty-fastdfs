@@ -1,4 +1,12 @@
 /**
+* Copyright (C) 2013 k-49.com
+*
+* gcc f_upload.c -I /usr/local/fdfs/include/fastdfs/ -I /usr/local/fdfs/include/fastcommon/ -L /usr/local/fdfs/lib/ -l fdfsclient -l fastcommon -I ./ -g -o fb
+* fastDFS上传文件，上传库调用实践(直接上传文件)
+*
+*
+*
+*
 * Copyright (C) 2008 Happy Fish / YuQing
 *
 * FastDFS may be copied only under the terms of the GNU General
@@ -16,33 +24,17 @@
 #include "fdfs_client.h"
 #include "logger.h"
 
-// static void usage(char *argv[])
-// {
-//      printf("Usage: %s <config_filename> <local_filename> " \
-//           "[storage_ip:port] [store_path_index]\n", argv[0]);
-// }
-
 int do_upload(const char *conf_filename, const char *local_filename, const char *pIpAndPort, int store_path_index)
 {
-     // char *conf_filename;
-     // char *local_filename;
      char group_name[FDFS_GROUP_NAME_MAX_LEN + 1];
      ConnectionInfo *pTrackerServer;
      int result;
-     // int store_path_index;
      ConnectionInfo storageServer;
      char file_id[128];
-     
-     // if (argc < 3 || argc == 4)
-     // {
-     //      usage(argv);
-     //      return 1;
-     // }
 
-     // log_init();
-     // g_log_context.log_level = LOG_ERR;
+     log_init();
+     g_log_context.log_level = LOG_ERR;
 
-     // conf_filename = argv[1];
      if ((result=fdfs_client_init(conf_filename)) != 0)
      {
           return result;
@@ -54,23 +46,20 @@ int do_upload(const char *conf_filename, const char *local_filename, const char 
           fdfs_client_destroy();
           return errno != 0 ? errno : ECONNREFUSED;
      }
-
-     // local_filename = argv[2];
      *group_name = '\0';
-     // if (argc >= 5)
+
      if(pIpAndPort != NULL)
      {
           const char *pPort;
           const char *pIpAndPort;
 
-          // pIpAndPort = argv[3];
           pPort = strchr(pIpAndPort, ':');
           if (pPort == NULL)
           {
                fdfs_client_destroy();
                fprintf(stderr, "invalid storage ip address and " \
                     "port: %s\n", pIpAndPort);
-               // usage(argv);
+
                return 1;
           }
 
@@ -78,8 +67,6 @@ int do_upload(const char *conf_filename, const char *local_filename, const char 
           snprintf(storageServer.ip_addr, sizeof(storageServer.ip_addr), \
                 "%.*s", (int)(pPort - pIpAndPort), pIpAndPort);
           storageServer.port = atoi(pPort + 1);
-
-          // store_path_index = atoi(argv[4]);
      }
      else if ((result=tracker_query_storage_store(pTrackerServer, \
                      &storageServer, group_name, &store_path_index)) != 0)
@@ -115,6 +102,8 @@ int do_upload(const char *conf_filename, const char *local_filename, const char 
 int main()
 {
      char *conf_filename = "/etc/fdfs/client.conf";
+     // char *local_filename = "/Users/zhoujing/Pictures/ttt.md";
      char *local_filename = "/Users/zhoujing/Pictures/geek1.png";
+     // char *local_filename = "/Users/zhoujing/Pictures/cy.jpeg";
      do_upload(conf_filename, local_filename, NULL, 0);
 }
